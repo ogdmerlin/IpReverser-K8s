@@ -1,4 +1,3 @@
----
 name: Infrastucture Deployment DO
 on:
   push:
@@ -16,46 +15,31 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-      - name: Configure DigitalOcean Credentials
-        env:
-          DIGITALOCEAN_TOKEN: ${{ secrets.DIGITALOCEAN_TOKEN }}
-
-        run: |
-          echo "Configuring DigitalOcean credentials..."
-          export DIGITALOCEAN_TOKEN="$DIGITALOCEAN_TOKEN"
 
       - name: Configure Spaces Credentials
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_DEFAULT_REGION: sf03
-        run: |
-          echo "Configuring Spaces credentials..."
+          AWS_DEFAULT_REGION: sf03  # Or your Spaces region
+      - name: Configure DigitalOcean Credentials
+        env:
+          DIGITALOCEAN_TOKEN: ${{ secrets.DIGITALOCEAN_TOKEN }} # For doctl or other DO interaction
 
       - name: Install Terraform
         uses: hashicorp/setup-terraform@v3
         with:
-          terraform_version: 1.10.5
-      - name: Change Directory to Infrastructure
-        run: cd K8s_Infra/
-      - name: Terraform Init
+          terraform_wrapper: false # For custom version
+          terraform_version: 1.5.5 # Or latest stable
+
+      - name: Terraform Init and Plan
+        working-directory: ./K8s_Infra
         run: |
-          cd K8s_Infra/
           terraform init
-
-      - name: Terraform Validate
-        run: |
-          cd K8s_Infra/
           terraform validate
+          terraform plan -var do_token=${{ secrets.DIGITALOCEAN_TOKEN }} # Pass variable here
 
-      - name: Terraform Plan
+      - name: Terraform Apply
+        working-directory: ./K8s_Infra
         env:
-          TF_VAR_do_token: ${{ secrets.DIGITALOCEAN_TOKEN }}
-        run: |
-          cd K8s_Infra/
-          terraform plan
-
-      - name: Apply and Save Terraform State
-        run: |
-          cd K8s_Infra/
-          terraform apply --auto-approve
+          TF_VAR_do_token: ${{ secrets.DIGITALOCEAN_TOKEN }} # Pass variable here
+        run: terraform apply --auto-approve
