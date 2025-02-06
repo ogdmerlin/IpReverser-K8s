@@ -19,6 +19,7 @@ jobs:
       - name: Configure DigitalOcean Credentials
         env:
           DIGITALOCEAN_TOKEN: ${{ secrets.DIGITALOCEAN_TOKEN }}
+
         run: |
           echo "Configuring DigitalOcean credentials..."
           export DIGITALOCEAN_TOKEN="$DIGITALOCEAN_TOKEN"
@@ -33,15 +34,19 @@ jobs:
         run: |
           cd K8s_Infra
           terraform init
+
+      - name: Terraform Validate
+        run: |
+          cd K8s_Infra
+          terraform validate
+
+      - name: Terraform Plan
+        env:
+          TF_VAR_do_token: ${{ secrets.DIGITALOCEAN_TOKEN }}
+        run: |
+          cd K8s_Infra
           terraform plan
-    #   - name: Terraform Validate
-    #     run: |
-    #       cd K8s_Infra
-    #       terraform validate
-    #   - name: Terraform Plan
-    #     run: |
-    #       cd K8s_Infra
-    #       terraform plan
+
       - name: Apply and Save Terraform State
         run: |
           cd K8s_Infra
