@@ -1,0 +1,61 @@
+---
+name: Infrastucture Deployment DO
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+permissions:
+  id-token: write
+jobs:
+  terraform:
+    name: Deploy Infrastructure
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      - name: Configure DigitalOcean Credentials
+        env:
+          DIGITALOCEAN_TOKEN: ${{ secrets.DIGITALOCEAN_TOKEN }}
+        run: |
+          echo "Configuring DigitalOcean credentials..."
+          export DIGITALOCEAN_TOKEN="$DIGITALOCEAN_TOKEN"
+
+      - name: Install Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.6.0
+      - name: Change Directory to Infrastructure
+        run: cd K8s_Infra/
+      - name: Terraform Init
+        run: |
+          cd K8s_Infra
+          terraform init -backend=false
+      - name: Terraform Validate
+        run: |
+          cd K8s_Infra
+          terraform validate
+      - name: Terraform Plan
+        run: |
+          cd K8s_Infra
+          terraform plan -out=tfplan
+      - name: Apply and Save Terraform State
+        run: |
+          cd K8s_Infra
+          terraform apply --auto-approve tfplan
+          
+      - name: Commit State File
+        run: >
+          cd K8s_Infra
+
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+
+          git config --global user.name "github-actions[bot]"
+
+          git add .terraform.tfstate
+
+          git commit -m "Automated state update" || echo "No changes to commit"
+
+          git push
