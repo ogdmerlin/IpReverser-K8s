@@ -1,5 +1,5 @@
 ---
-name: Infrastucture Deployment DO
+name: Infrastucture Deployment
 on:
   push:
     branches:
@@ -59,7 +59,7 @@ jobs:
           cd ./K8s_Infra
           terraform plan
 
-      - name: Apply and Save Terraform State
-        run: |
-          cd ./K8s_Infra
-          terraform apply --auto-approve
+    #   - name: Apply and Save Terraform State
+    #     run: |
+    #       cd ./K8s_Infra
+    #       terraform apply --auto-approve
