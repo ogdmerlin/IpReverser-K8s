@@ -7,7 +7,11 @@ required_version = ">= 1.6.3"
     }
 
     bucket = "reverseip-statefile"
-    key    = "terraform.tfstate"
+    key    = "${TF_VAR_BACKEND_digitalocean_spaces_key}"
+
+    access_key = "${TF_VAR_BACKEND_digitalocean_spaces_access_key}"
+    secret_key = "${TF_VAR_BACKEND_digitalocean_spaces_secret_key}"
+  
 
     # Deactivate a few AWS-specific checks
     skip_credentials_validation = true

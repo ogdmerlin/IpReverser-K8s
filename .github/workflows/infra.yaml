@@ -1,0 +1,66 @@
+name: Terraform AWS Deployment
+
+on: 
+    push:
+        branches: 
+            - main #Trigger deployment on push to main branch
+    pull_request:
+        branches: 
+            - main #Trigger deployment on pull request to main branch   
+
+permissions:
+    id-token: write
+    contents: read
+
+jobs:
+    terraform:
+        name: Deploy Infrastructure 
+        runs-on: ubuntu-latest
+        env:
+          TF_version: latest
+          TF_working_dir: ./K8s_Infra/
+          TF_VAR_digitalocean_region: ${{ secrets.Region }}
+          TF_VAR_BACKEND_digitalocean_spaces_bucket: ${{ secrets.DIGITALOCEAN_SPACES_BUCKET }}
+          TF_VAR_BACKEND_digitalocean_spaces_access_key: ${{ secrets.DIGITALOCEAN_SPACES_ACCESS_KEY }}
+          TF_VAR_BACKEND_digitalocean_spaces_secret_key: ${{ secrets.DIGITALOCEAN_SPACES_SECRET_KEY }}
+          TF_VAR_digitalocean_api_token: ${{ secrets.DIGITALOCEAN_API_TOKEN }}
+
+        steps:
+        - name: Checkout repository
+          uses: actions/checkout@v4
+
+        - name: Setup Terraform
+          uses: hashicorp/setup-terraform@v3
+          with:
+            terraform_version: ${{ env.TF_version }}
+
+        - name: Set Terraform Backend Key
+          run: echo "TF_VAR_BACKEND_digitalocean_spaces_key=${GITHUB_REPOSITORY#*/}/${GITHUB_REF#refs/heads/}/terraform.tfstate" >> $GITHUB_ENV
+
+        - name: Set Digital Space Credentials
+          run: |
+            echo "TF_VAR_digitalocean_region=${{ secrets.Region }}" >> $GITHUB_ENV
+            echo "TF_VAR_BACKEND_digitalocean_spaces_access_key=${{ secrets.DIGITALOCEAN_SPACES_ACCESS_KEY }}" >> $GITHUB_ENV
+            echo "TF_VAR_BACKEND_digitalocean_spaces_secret_key=${{ secrets.DIGITALOCEAN_SPACES_SECRET_KEY  }}" >> $GITHUB_ENV
+
+        - name: Terraform Format
+          id: fmt
+          working-directory: ${{ env.TF_working_dir }}
+          run: terraform fmt -check
+          continue-on-error: true
+
+        - name: Terraform Init
+          id: init
+          working-directory: ${{ env.TF_working_dir }}
+          run: |
+            terraform init -input=false \
+              -backend-config="bucket=${TF_VAR_BACKEND_digitalocean_spaces_bucket}" \
+              -backend-config="key=${TF_VAR_BACKEND_digitalocean_spaces_key}" \
+              -backend-config="access_key=${TF_VAR_BACKEND_digitalocean_spaces_access_key}" \
+              -backend-config="secret_key=${TF_VAR_BACKEND_digitalocean_spaces_secret_key}" \
+              -backend-config="region=${TF_VAR_digitalocean_region}" \
+
+        - name: Terraform Plan
+          id: plan
+          working-directory: ${{ env.TF_working_dir }}
+          run: terraform plan -input=false -out="${GITHUB_SHA:0:7}.tfplan"
