@@ -32,22 +32,22 @@ jobs:
         run: cd K8s_Infra/
       - name: Terraform Init
         run: |
-          cd K8s_Infra
+          cd K8s_Infra/
           terraform init
 
       - name: Terraform Validate
         run: |
-          cd K8s_Infra
+          cd K8s_Infra/
           terraform validate
 
       - name: Terraform Plan
         env:
           TF_VAR_do_token: ${{ secrets.DIGITALOCEAN_TOKEN }}
         run: |
-          cd K8s_Infra
+          cd K8s_Infra/
           terraform plan
 
       - name: Apply and Save Terraform State
         run: |
-          cd K8s_Infra
+          cd K8s_Infra/
           terraform apply --auto-approve
