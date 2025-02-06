@@ -26,7 +26,7 @@ jobs:
       - name: Install Terraform
         uses: hashicorp/setup-terraform@v3
         with:
-          terraform_version: 1.6.0
+          terraform_version: 1.10.5
       - name: Change Directory to Infrastructure
         run: cd K8s_Infra/
       - name: Terraform Init
@@ -45,17 +45,3 @@ jobs:
         run: |
           cd K8s_Infra
           terraform apply --auto-approve tfplan
-          
-      - name: Commit State File
-        run: >
-          cd K8s_Infra
-
-          git config --global user.email "github-actions[bot]@users.noreply.github.com"
-
-          git config --global user.name "github-actions[bot]"
-
-          git add .terraform.tfstate
-
-          git commit -m "Automated state update" || echo "No changes to commit"
-
-          git push
