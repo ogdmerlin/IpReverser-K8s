@@ -32,7 +32,7 @@ jobs:
       - name: Terraform Init
         run: |
           cd K8s_Infra
-          terraform init -backend=false
+          terraform init -backend=false -reconfigure
       - name: Terraform Validate
         run: |
           cd K8s_Infra
