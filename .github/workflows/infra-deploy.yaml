@@ -40,8 +40,8 @@ jobs:
       - name: Terraform Plan
         run: |
           cd K8s_Infra
-          terraform plan -out=tfplan
+          terraform plan -out=tfplan -backend=false
       - name: Apply and Save Terraform State
         run: |
           cd K8s_Infra
-          terraform apply --auto-approve tfplan
+          terraform apply -backend=false --auto-approve tfplan
