@@ -64,4 +64,4 @@ jobs:
         - name: Terraform Plan
           id: plan
           working-directory: ${{ env.TF_working_dir }}
-          run: terraform plan -var-file=terraform.tfvars -input=false -out="${GITHUB_SHA:0:7}.tfplan" 
+          run: terraform plan -var-file=terraform.tfvars -out="${GITHUB_SHA:0:7}.tfplan" 
