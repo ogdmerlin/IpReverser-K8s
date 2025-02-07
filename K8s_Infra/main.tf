@@ -22,7 +22,7 @@ data "digitalocean_kubernetes_versions" "current" {}
 resource "digitalocean_kubernetes_cluster" "my_cluster" {
   name    = "my-k8s-cluster"
   region  = "sfo3" # Replace with your preferred region
-  version = "1.31.1-do.5"
+  version = data.digitalocean_kubernetes_versions.current.latest_version
 
   node_pool {
     name       = "default-pool"
