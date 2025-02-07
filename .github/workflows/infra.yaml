@@ -75,7 +75,10 @@ jobs:
         - name: Extract Kubeconfig
           id: get-kubeconfig
           working-directory: ${{ env.TF_working_dir }}
-          run: echo "KUBECONFIG=$(terraform output -raw kubeconfig)" >> ${GITHUB_ENV}
+          run: |
+            terraform output -raw kubeconfig | base64 -w 0 > kubeconfig.b64
+            echo "KUBECONFIG=$(cat kubeconfig.b64)" >> $GITHUB_ENV
+
 
     application:
         name: Helm Deploy
