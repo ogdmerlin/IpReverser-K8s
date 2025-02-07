@@ -13,7 +13,7 @@ terraform {
 
 provider "digitalocean" {
 
-  token = "${TF_VAR_digitalocean_token}"
+  token = var.digitalocean_token
 }
 
 

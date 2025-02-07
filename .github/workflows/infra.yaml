@@ -42,6 +42,7 @@ jobs:
             echo "TF_VAR_digitalocean_region=${{ secrets.Region }}" >> $GITHUB_ENV
             echo "TF_VAR_BACKEND_digitalocean_spaces_access_key=${{ secrets.DIGITALOCEAN_SPACES_ACCESS_KEY }}" >> $GITHUB_ENV
             echo "TF_VAR_BACKEND_digitalocean_spaces_secret_key=${{ secrets.DIGITALOCEAN_SPACES_SECRET_KEY  }}" >> $GITHUB_ENV
+            echo "TF_VAR_digitalocean_api_token=${{ secrets.DIGITALOCEAN_API_TOKEN }}" >> $GITHUB_ENV
 
         - name: Terraform Format
           id: fmt
@@ -64,5 +65,5 @@ jobs:
         - name: Terraform Plan
           id: plan
           working-directory: ${{ env.TF_working_dir }}
-          run: terraform plan -input=false -out="${GITHUB_SHA:0:7}.tfplan" 
+          run: terraform plan -var="digitalocean_token=${TF_VAR_digitalocean_api_token}" -input=false -out="${GITHUB_SHA:0:7}.tfplan" 
 
