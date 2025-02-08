@@ -307,8 +307,8 @@ kubectl get nodes
     kubectl create secret generic db-credentials --from-literal=DATABASE_URL=postgresql://user:password@host:port/dbname
     ```
 
-    > [!NOTE]  
-    > _Replace the connection string with your PostgreSQL credentials_.
+> [!WARNING]  
+> _Replace the connection string with your PostgreSQL credentials_.
 
 4. **Deploy the Application with helm:**
 
