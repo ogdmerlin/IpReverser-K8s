@@ -327,8 +327,9 @@ kubectl get nodes
 
 > [!IMPORTANT]  
 > _The `kubectl get svc` show an external IP address that let us access our application from the browser._  
+![kubectl-get-services](/pub/image1.png)
 > It may take a few minutes for the LoadBalancer IP to be provisioned, Once the external IP is assigned, access your app at: `http://<EXTERNAL_IP>:8088`.  
- >
+![alt text](/pub/image2.png)
 #
 
  **Troubleshooting CrashLoopBackOff Error:**  
