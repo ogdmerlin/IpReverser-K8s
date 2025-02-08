@@ -78,8 +78,8 @@ This project provides a simple but scalable solution for displaying and storing 
 1. **Clone the Repository:**
 
    ```bash
-   git clone https://github.com/ogdmerlin/reverse-ip.git
-   cd reverse-ip
+   git clone https://github.com/ogdmerlin/IpReverser-K8s.git
+   cd IpReverser-K8s
    ```
 
 2. **Run Locally with Docker Compose (Optional):**
@@ -149,8 +149,8 @@ This project provides a simple but scalable solution for displaying and storing 
     docker push ogdmerlin/reverse-ip:v1
     ```
 
-    > [!NOTE]  
-    > _You must be logged in to Docker Hub to push the image, and you can replace `ogdmerlin` with your Docker Hub username_.
+> [!NOTE]  
+> _You must be logged in to Docker Hub to push the image, and you can replace `ogdmerlin` with your Docker Hub username_.
 
     Login to Docker Hub:
 
@@ -285,8 +285,8 @@ kubectl get nodes
     helm install reverse-ip 
     ```
 
-    > [!TIP]  
-    > _You can customize the Helm chart values in `./reverse-ip/values.yaml` before deploying_.
+>[!TIP]  
+> _You can customize the Helm chart values in `./reverse-ip/values.yaml` before deploying_.
 
 2. **Update Deployment Template (templates/deployment.yaml):**
 
@@ -325,9 +325,9 @@ kubectl get nodes
     kubectl get svc
     ```
 
-    > [!TIP]  
-    > _The `kubectl get svc` show an external IP address that let us access our application from the browser._  
-    > It may take a few minutes for the LoadBalancer IP to be provisioned, Once the external IP is assigned, access your app at: `http://<EXTERNAL_IP>:8088`.  
+> [!TIP]  
+> _The `kubectl get svc` show an external IP address that let us access our application from the browser._  
+> It may take a few minutes for the LoadBalancer IP to be provisioned, Once the external IP is assigned, access your app at: `http://<EXTERNAL_IP>:8088`.  
  >
 #
 
