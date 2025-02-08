@@ -149,7 +149,7 @@ This project provides a simple but scalable solution for displaying and storing 
     docker push ogdmerlin/reverse-ip:v1
     ```
 
-> [!NOTE]  
+> [!IMPORTANT]  
 > _You must be logged in to Docker Hub to push the image, and you can replace `ogdmerlin` with your Docker Hub username_.
 
     Login to Docker Hub:
@@ -325,13 +325,14 @@ kubectl get nodes
     kubectl get svc
     ```
 
-> [!TIP]  
+> [!IMPORTANT]  
 > _The `kubectl get svc` show an external IP address that let us access our application from the browser._  
 > It may take a few minutes for the LoadBalancer IP to be provisioned, Once the external IP is assigned, access your app at: `http://<EXTERNAL_IP>:8088`.  
  >
 #
 
  **Troubleshooting CrashLoopBackOff Error:**  
+> [!WARNING]  
 >I experience an issue with the pods not starting due to the `CrashLoopBackOff` error.  
 > I resolved it by checking the logs with `kubectl logs <pod-name>` and after spending some time, I found out that the issue was with the `livenessProbe`, and `readinessProbe` was failing. I had to comment out the `livenessProbe` and `readinessProbe` in the deployment.yaml file.
 
