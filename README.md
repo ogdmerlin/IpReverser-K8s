@@ -78,7 +78,7 @@ This project provides a simple but scalable solution for displaying and storing 
 1. **Clone the Repository:**
 
    ```bash
-   git clone https://github.com/yourusername/reverse-ip.git
+   git clone https://github.com/ogdmerlin/reverse-ip.git
    cd reverse-ip
    ```
 
